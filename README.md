@@ -13,7 +13,10 @@ npm i sp-video
   import 'sp-video/sp-video.js';
 </script>
 
-<sp-video></sp-video>
+<sp-video video-id="a_0QSRlRJuI" provider="youtube" text="Video abspielen">
+  <img slot="thumbnail" src="https://img.youtube.com/vi/a_0QSRlRJuI/maxresdefault.jpg" />
+  <a slot="video-controller" href="https://www.youtube.com/watch?v=a_0QSRlRJuI" target="black">Video in neuem Tab öffnen</a>
+</sp-video>
 ```
 
 ## Linting with ESLint, Prettier, and Types
