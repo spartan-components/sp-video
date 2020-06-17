@@ -1,10 +1,12 @@
 # \<sp-video>
 
+> Lazy-loaded vimeo and youtube iframes (loads on user click)
+
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 
 ## Installation
 ```bash
-npm i sp-video
+npm i @spartan-components/sp-video
 ```
 
 ## Usage
@@ -13,14 +15,18 @@ npm i sp-video
   import 'sp-video/sp-video.js';
 </script>
 
-// youtube and vimeo are supported
+// Supported providers: *youtube* & *vimeo*
 <sp-video video-id="a_0QSRlRJuI" provider="youtube" text="Play video">
-  // provide a custom thumbnail, that is displayed until the user clicks the load button
+  
+  // custom video thumbnail
   <img slot="thumbnail" src="https://img.youtube.com/vi/a_0QSRlRJuI/maxresdefault.jpg" />
+  
   // fallback link for browsers that don't support webcomponents
   <a slot="video-controller" href="https://www.youtube.com/watch?v=a_0QSRlRJuI" target="black">Video in neuem Tab öffnen</a>
 </sp-video>
 ```
+
+
 
 ## Linting with ESLint, Prettier, and Types
 To scan the project for linting errors, run
