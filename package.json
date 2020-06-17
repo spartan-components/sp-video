@@ -1,11 +1,14 @@
 {
-  "name": "sp-video",
+  "name": "@spartan-components/sp-video",
   "version": "0.0.0",
   "description": "Webcomponent sp-video following open-wc recommendations",
   "author": "sp-video",
   "license": "MIT",
   "main": "index.js",
   "module": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
