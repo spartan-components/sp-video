@@ -13,8 +13,11 @@ npm i sp-video
   import 'sp-video/sp-video.js';
 </script>
 
-<sp-video video-id="a_0QSRlRJuI" provider="youtube" text="Video abspielen">
+// youtube and vimeo are supported
+<sp-video video-id="a_0QSRlRJuI" provider="youtube" text="Play video">
+  // provide a custom thumbnail, that is displayed until the user clicks the load button
   <img slot="thumbnail" src="https://img.youtube.com/vi/a_0QSRlRJuI/maxresdefault.jpg" />
+  // fallback link for browsers that don't support webcomponents
   <a slot="video-controller" href="https://www.youtube.com/watch?v=a_0QSRlRJuI" target="black">Video in neuem Tab öffnen</a>
 </sp-video>
 ```
