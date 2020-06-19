@@ -50,6 +50,7 @@ export class SpVideo extends LitElement {
           --button-text-transform: uppercase;
           font-family: var(--font-stack);
           display: block;
+          position: relative;
         }
         .frame {
           padding-bottom: 56.25%;
