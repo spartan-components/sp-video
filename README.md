@@ -12,10 +12,10 @@ npm i @spartan-components/sp-video
 ## Usage
 ```html
 <script type="module">
-  import 'sp-video/sp-video.js';
+  import '@spartan-components/sp-video/sp-video.js';
 </script>
 
-// Supported providers: *youtube* & *vimeo*
+// Supported providers: youtube and vimeo
 <sp-video video-id="a_0QSRlRJuI" provider="youtube" text="Play video">
   
   // custom video thumbnail
