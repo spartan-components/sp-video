@@ -68,12 +68,6 @@ export class SpVideo extends LitElement {
           position: absolute;
           width: 100%;
         }
-        ::slotted(img),
-        ::slotted(picture),
-        iframe {
-          object-fit: cover;
-          overflow: hidden;
-        }
         .button-wrapper {
           align-items: center;
           display: flex;
