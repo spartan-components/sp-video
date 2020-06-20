@@ -3,20 +3,18 @@
 <head>
   <meta charset="utf-8">
   <style>
-    sp-video {
-      display: block;
-      position: relative;
-    }
+    /* hide button on undefined element */
+    .hidden-when-undefined { display: none; }
 
     /* "breakout" link as fallback */
-    a[slot="video-controller"] {
+    a.fallback-link {
       position: static;
     }
-    a[slot="video-controller"],
-    a[slot="video-controller"]::before {
+    a.fallback-link,
+    a.fallback-link::before {
       cursor: pointer;
     }
-    a[slot="video-controller"]::before {
+    a.fallback-link::before {
       content: "";
       display: block;
       position: absolute;
@@ -29,9 +27,32 @@
 </head>
 <body>
 
-  <sp-video video-id="a_0QSRlRJuI" provider="youtube" text="Video abspielen">
-    <img slot="thumbnail" src="https://img.youtube.com/vi/a_0QSRlRJuI/maxresdefault.jpg" />
-    <a slot="video-controller" href="https://www.youtube.com/watch?v=a_0QSRlRJuI" target="black">Video in neuem Tab öffnen</a>
+  <sp-video
+    provider="youtube-nocookie"
+    video-id="K5DkT_zrzaw"
+  >
+    <img
+      slot="thumbnail"
+      width="720"
+      height="405"
+      loading="lazy"
+      src="https://img.youtube.com/vi/K5DkT_zrzaw/maxresdefault.jpg"
+      alt=""
+    />
+    <button
+      slot="controller"
+      class="hidden-when-undefined"
+    >
+      Play video
+    </button>
+    <a
+      href="https://www.youtube.com/watch?v=K5DkT_zrzaw"
+      class="fallback-link"
+      target="blank"
+      rel="noopener noreferrer"
+    >
+      Open video in new tab
+    </a>
   </sp-video>
 
   <script type="module">

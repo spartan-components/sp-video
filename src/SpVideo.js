@@ -1,35 +1,57 @@
 import { html, css, LitElement } from 'lit-element';
 import { BaseStyles } from '@spartan-components/base-styles';
 
-// Todo: add option for using custom iframes
-
-function constructIframe(id, provider) {
-  
-  const basePath = {
-    youtube: 'https://www.youtube-nocookie.com/embed',
-    vimeo: 'https://player.vimeo.com/video'
-  };
-
+const constructIframe = (videoId, provider, customBaseUrl, customAllow) => {
   const config = {
-    youtube: ['accelerometer', 'autoplay', 'encrypted-media', 'gyroscope', 'picture-in-picture'],
-    vimeo: ['autoplay', 'fullscreen']
+    baseUrl: {
+      'youtube': 'https://www.youtube.com/embed/',
+      'youtube-nocookie': 'https://www.youtube-nocookie.com/embed/',
+      'vimeo': 'https://www.youtube-nocookie.com/embed/'
+    },
+    allow: {
+      'youtube': ['accelerometer', 'autoplay', 'encrypted-media', 'gyroscope', 'picture-in-picture'],
+      'youtube-nocookie': ['accelerometer', 'autoplay', 'encrypted-media', 'gyroscope', 'picture-in-picture'],
+      'vimeo': ['autoplay', 'fullscreen']
+    }
   }
 
-  if (provider) {
-    return html`
-      <div class="frame">
-        <iframe frameborder="0" src="${basePath[provider]}/${id}" allow="${config[provider].join(', ')}" allowfullscreen></iframe>
-      </div>`;
-  }
-  return html`<p>no provider specified</p>`
+  return html`
+  <div class="frame">
+    <iframe
+      frameborder="0"
+      src="${config.baseUrl[provider]}/${videoId}"
+      allow="${config.allow[provider].join(', ')}"
+      allowfullscreen
+    ></iframe>
+  </div>
+  `;
 }
 
 export class SpVideo extends LitElement {
+
+  constructor() {
+    super();
+    this.iframeVisible = false;
+  }
+
+  static get properties() {
+    return {
+      customAllow: { type: Array },
+      customBaseUrl: { type: String },
+      provider: { type: String },
+      videoId: {
+        type: String,
+        attribute: 'video-id'
+      },
+    }
+  }
+
   static get styles() {
     return [
       BaseStyles,
       css`
         :host {
+          /* new basic styles */
           --size-000: 0.08rem;
           --size-100: 0.16rem;
           --size-200: 0.4rem;
@@ -41,17 +63,13 @@ export class SpVideo extends LitElement {
           --size-800: 14rem;
           --size-900: 32rem;
           --transition-speed: 300ms;
-          --button-background-color: #fafafa;
-          --button-text-color: #212121;
-          --button-border-style: none;
-          --button-border-radius: 3px;
-          --button-padding: var(--size-300) var(--size-400);
-          --button-letter-spacing: var(--size-000);
-          --button-text-transform: uppercase;
+
           font-family: var(--font-stack);
           display: block;
           position: relative;
         }
+        /* unhide elements when defined */
+        ::slotted([class="hidden-when-undefined"]) { display: block!important; }
         .frame {
           padding-bottom: 56.25%;
           position: relative;
@@ -72,61 +90,43 @@ export class SpVideo extends LitElement {
           align-items: center;
           display: flex;
           justify-content: center;
-        }
-        button {
-          background-color: var(--button-background-color);
-          border: var(--button-border-style);
-          color: var(--button-text-color);
-          border-radius: var(--button-border-radius);
-          font-family: inherit;
-          letter-spacing: var(--button-letter-spacing);
-          padding: var(--button-padding);
-          text-transform: var(--button-text-transform);
-          transition: var(--transition-speed) ease;
-        }
-        button[invertable]:hover {
-          background-color: var(--button-text-color);
-          color: var(--button-background-color);
         }`
     ];
   }
 
-  static get properties() {
-    return {
-      showIframe: { type: Boolean },
-      text: { type: String },
-      provider: { type: String },
-      videoId: {
-        type: String,
-        attribute: 'video-id'
-      }
-    };
+  connectedCallback() {
+    // listen to all clicks on element
+    super.connectedCallback();
+    this.addEventListener('click', this._onClick);
   }
 
-  constructor() {
-    super();
-    this.showIframe = false;
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('click', this._onClick);
+  }
+
+  _onClick(event) {
+    // If the node is not a button nothing has to be done
+    if (event.target.nodeName !== 'BUTTON')
+      return;
+    // else -> show iframe
+    this.iframeVisible = true;
+    this.requestUpdate();
   }
 
   render() {
     return html`
-      ${!this.showIframe
-        // conditionally render iframe:
-        // if showIframe = false (first case, after '?') -> button is shown
-        // if showIframe = true (second case, after ':') -> iframe is shown
-        ? html`
-          <div class="frame">
-            <slot name="thumbnail"></slot>
-          </div>
-          <div class="pin button-wrapper">
-            <button invertable @click="${this.handleClick}">${this.text}</button>
-          </div>`
-        : constructIframe(this.videoId, this.provider, this.rawIframe)
-      }`;
-  }
-
-  handleClick() {
-    this.showIframe = !this.showIframe;
-    this.setAttribute('visible', '');
+    ${!this.iframeVisible ?
+      html`
+      <div class="frame">
+        <slot name="thumbnail"></slot>
+      </div>
+      <div class="pin button-wrapper">
+        <slot name="controller"></slot>
+      </div>
+      `:
+      constructIframe(this.videoId, this.provider)
+    }
+    `;
   }
 }
