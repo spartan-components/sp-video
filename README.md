@@ -11,18 +11,41 @@ npm i @spartan-components/sp-video
 
 ## Usage
 ```html
+<!-- Import module -->
 <script type="module">
   import '@spartan-components/sp-video/sp-video.js';
 </script>
 
-// Supported providers: youtube and vimeo
-<sp-video video-id="a_0QSRlRJuI" provider="youtube" text="Play video">
-  
-  // custom video thumbnail
-  <img slot="thumbnail" src="https://img.youtube.com/vi/a_0QSRlRJuI/maxresdefault.jpg" />
-  
-  // fallback link for browsers that don't support webcomponents
-  <a slot="video-controller" href="https://www.youtube.com/watch?v=a_0QSRlRJuI" target="black">Video in neuem Tab öffnen</a>
+<!-- Supported Providers: youtube, youtube-nocookie, vimeo -->
+<sp-video
+  provider="youtube-nocookie"
+  video-id="K5DkT_zrzaw"
+>
+  <!-- Custom thumbnail image, declared as slot="thumbnail" -->
+  <img
+    slot="thumbnail"
+    width="720"
+    height="405"
+    loading="lazy"
+    src="https://img.youtube.com/vi/K5DkT_zrzaw/maxresdefault.jpg"
+    alt=""
+  />
+  <!-- Custom video controller, declared as slot="controller", iframe loads on click -->
+  <button
+    slot="controller"
+    class="hidden-when-undefined"
+  >
+    Play video
+  </button>
+  <!-- Fallback for browsers that don't support custom elements, has to use class="fallback-link" -->
+  <a
+    href="https://www.youtube.com/watch?v=K5DkT_zrzaw"
+    class="fallback-link"
+    target="blank"
+    rel="noopener noreferrer"
+  >
+    Open video in new tab
+  </a>
 </sp-video>
 ```
 
