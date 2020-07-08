@@ -1,6 +1,6 @@
 {
   "name": "@spartan-components/sp-video",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Webcomponent sp-video following open-wc recommendations",
   "author": "sp-video",
   "license": "MIT",
