@@ -1,5 +1,5 @@
 import { html, css, LitElement } from 'lit-element';
-import { BaseStyles } from '@spartan-components/base-styles';
+import { baseStyles } from '@spartan-components/base-styles'
 
 const constructIframe = (videoId, provider, customBaseUrl, customAllow) => {
   const config = {
@@ -19,8 +19,8 @@ const constructIframe = (videoId, provider, customBaseUrl, customAllow) => {
   <div class="frame">
     <iframe
       frameborder="0"
-      src="${config.baseUrl[provider]}/${videoId}"
-      allow="${config.allow[provider].join(', ')}"
+      src="${customBaseUrl || config.baseUrl[provider]}/${videoId}"
+      allow="${customAllow || config.allow[provider].join(', ')}"
       allowfullscreen
     ></iframe>
   </div>
@@ -48,22 +48,9 @@ export class SpVideo extends LitElement {
 
   static get styles() {
     return [
-      BaseStyles,
+      baseStyles,
       css`
         :host {
-          /* new basic styles */
-          --size-000: 0.08rem;
-          --size-100: 0.16rem;
-          --size-200: 0.4rem;
-          --size-300: 0.8rem;
-          --size-400: 1.6rem;
-          --size-500: 4rem;
-          --size-600: 6rem;
-          --size-700: 8rem;
-          --size-800: 14rem;
-          --size-900: 32rem;
-          --transition-speed: 300ms;
-
           font-family: var(--font-stack);
           display: block;
           position: relative;
