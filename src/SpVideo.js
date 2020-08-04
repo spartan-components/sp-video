@@ -31,7 +31,7 @@ export class SpVideo extends LitElement {
 
   constructor() {
     super();
-    this.iframeVisible = false;
+    this.videoLoaded = false;
   }
 
   static get properties() {
@@ -43,6 +43,11 @@ export class SpVideo extends LitElement {
         type: String,
         attribute: 'video-id'
       },
+      videoLoaded: {
+        type: Boolean,
+        attribute: 'video-loaded',
+        reflect: true
+      }
     }
   }
 
@@ -92,18 +97,29 @@ export class SpVideo extends LitElement {
     this.removeEventListener('click', this._onClick);
   }
 
+  attributeChangedCallback(name, oldval, newval) {
+    super.attributeChangedCallback(name, oldval, newval);
+    if(name === 'video-loaded') {
+      this._showVideo();
+    }
+  }
+
   _onClick(event) {
     // If the node is not a button nothing has to be done
     if (event.target.nodeName !== 'BUTTON')
       return;
     // else -> show iframe
-    this.iframeVisible = true;
+    this._showVideo();
+  }
+
+  _showVideo() {
+    this.videoLoaded = true;
     this.requestUpdate();
   }
 
   render() {
     return html`
-    ${!this.iframeVisible ?
+    ${!this.videoLoaded ?
       html`
       <div class="frame">
         <slot name="thumbnail"></slot>
