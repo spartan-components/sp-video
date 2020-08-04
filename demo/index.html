@@ -55,8 +55,13 @@
     </a>
   </sp-video>
 
+  <button class="controller-button">click me</button>
+
   <script type="module">
     import '../sp-video.js';
+    const button = document.querySelector('.controller-button');
+    const video = document.querySelector('sp-video');
+    button.addEventListener('click', () => video.setAttribute('video-loaded', ''));
   </script>
 </body>
 </html>
