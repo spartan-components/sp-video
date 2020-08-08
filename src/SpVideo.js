@@ -19,7 +19,7 @@ const constructIframe = (videoId, provider, customBaseUrl, customAllow) => {
   <div class="frame">
     <iframe
       frameborder="0"
-      src="${customBaseUrl || config.baseUrl[provider]}/${videoId}"
+      src="${customBaseUrl || config.baseUrl[provider]}/${videoId}?autoplay=1"
       allow="${customAllow || config.allow[provider].join(', ')}"
       allowfullscreen
     ></iframe>
