@@ -6,7 +6,7 @@ const constructIframe = (videoId, provider, customBaseUrl, customAllow) => {
     baseUrl: {
       'youtube': 'https://www.youtube.com/embed/',
       'youtube-nocookie': 'https://www.youtube-nocookie.com/embed/',
-      'vimeo': 'https://player.vimeo.com/video/'
+      'vimeo': 'https://player.vimeo.com/video'
     },
     allow: {
       'youtube': ['accelerometer', 'autoplay', 'encrypted-media', 'gyroscope', 'picture-in-picture'],
