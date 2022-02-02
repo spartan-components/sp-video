@@ -63,7 +63,7 @@ export class SpVideo extends LitElement {
         /* unhide elements when defined */
         ::slotted([class="hidden-when-undefined"]) { display: block!important; }
         .frame {
-          padding-bottom: 56.25%;
+          padding-bottom: var(--frame-padding-top, 56.25%);
           position: relative;
         }
         ::slotted(img),
