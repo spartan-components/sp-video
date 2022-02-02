@@ -68,6 +68,7 @@ export class SpVideo extends LitElement {
         }
         ::slotted(img),
         ::slotted(picture),
+        ::slotted(span),
         iframe,
         .pin {
           top: 0;
