@@ -30,8 +30,21 @@
   <sp-video
     provider="youtube-nocookie"
     video-id="K5DkT_zrzaw"
-    style="--frame-padding-top: 100px"
-  >
+    style="--frame-padding-top: 56.25%">
+
+    <div slot="cookieNotice">
+      <p><strong>Youtube Cookies</strong></p>
+      <p>
+        Wenn du dieses Video schaust, akzeptierst du die
+        <a href="#">Google Datenschutzrichtlinien</a>.
+      </p>
+      <button id="acceptCookies">OK</button>
+      <label>
+        <input type="checkbox" name="saveChoice" id="saveChoice">
+        Nicht erneut fragen
+      </label>
+    </div>
+
     <img
       slot="thumbnail"
       width="720"
@@ -84,13 +97,8 @@
     </a>
   </sp-video>
 
-  <button class="controller-button">click me</button>
-
   <script type="module">
     import '../sp-video.js';
-    const button = document.querySelector('.controller-button');
-    const video = document.querySelector('sp-video');
-    button.addEventListener('click', () => video.setAttribute('video-loaded', ''));
   </script>
 </body>
 </html>

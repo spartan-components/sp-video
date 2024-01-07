@@ -18,6 +18,7 @@ const constructIframe = (videoId, provider, customBaseUrl, customAllow) => {
   return html`
   <div class="frame">
     <iframe
+      title="Youtube with Video ID: ${videoId}"
       frameborder="0"
       src="${customBaseUrl || config.baseUrl[provider]}/${videoId}?autoplay=1"
       allow="${customAllow || config.allow[provider].join(', ')}"
@@ -27,27 +28,39 @@ const constructIframe = (videoId, provider, customBaseUrl, customAllow) => {
   `;
 }
 
+const initialTemplate = html`
+  <div class="frame">
+    <slot name="thumbnail"></slot>
+  </div>
+  <div class="pin content-wrapper">
+    <slot name="controller"></slot>
+  </div>`;
+
+const cookieNotice = html`
+  <div class="frame">
+    <slot name="thumbnail"></slot>
+  </div>
+  <div class="pin content-wrapper dim">
+    <slot name="cookieNotice"></slot>
+  </div>`;
+
 export class SpVideo extends LitElement {
 
-  constructor() {
-    super();
-    this.videoLoaded = false;
-  }
-
-  static get properties() {
-    return {
-      customAllow: { type: Array },
-      customBaseUrl: { type: String },
-      provider: { type: String },
-      videoId: {
-        type: String,
-        attribute: 'video-id'
-      },
-      videoLoaded: {
-        type: Boolean,
-        attribute: 'video-loaded',
-        reflect: true
-      }
+  static properties = {
+    customAllow: { type: Array },
+    customBaseUrl: { type: String },
+    provider: { type: String },
+    state: {
+      type: String
+    },
+    videoId: {
+      type: String,
+      attribute: 'video-id'
+    },
+    videoLoaded: {
+      type: Boolean,
+      attribute: 'video-loaded',
+      reflect: true
     }
   }
 
@@ -79,16 +92,27 @@ export class SpVideo extends LitElement {
           position: absolute;
           width: 100%;
         }
-        .button-wrapper {
+        .content-wrapper {
           align-items: center;
           display: flex;
           justify-content: center;
+        }
+        .content-wrapper.dim {
+          box-sizing: border-box;
+          background-color: rgba(255, 255, 255, 0.5);
+          backdrop-filter: blur(1em);
+          padding: 0 1em;
         }`
     ];
   }
 
+  constructor() {
+    super();
+    this.provider = '';
+    this.state = 'initial';
+  }
+
   connectedCallback() {
-    // listen to all clicks on element
     super.connectedCallback();
     this.addEventListener('click', this._onClick);
   }
@@ -101,36 +125,49 @@ export class SpVideo extends LitElement {
   attributeChangedCallback(name, oldval, newval) {
     super.attributeChangedCallback(name, oldval, newval);
     if(name === 'video-loaded') {
-      this._showVideo();
+      this.setState();
     }
+  }
+
+  static constructKey(provider) {
+    return `${provider}CookiesAccepted`;
   }
 
   _onClick(event) {
-    // If the node is not a button nothing has to be done
-    if (event.target.nodeName !== 'BUTTON')
-      return;
-    // else -> show iframe
-    this._showVideo();
+    const clickedElement = event.composedPath()[0];
+    if (clickedElement.getAttribute('slot') === 'controller') this.setState();
+    if (clickedElement.id === 'acceptCookies') {
+      const saveChoiceEl = this.querySelector('#saveChoice');
+      const saveChoice = saveChoiceEl.checked;
+      const key = SpVideo.constructKey(this.provider);
+      if (saveChoice) localStorage.setItem(key, true);
+      this.state = 'renderVideo';
+    }
   }
 
-  _showVideo() {
-    this.videoLoaded = true;
-    this.requestUpdate();
+  checkIfCookiesAccepted() {
+    const key = SpVideo.constructKey(this.provider);
+    const _accepted = localStorage.getItem(key);
+    const accepted = JSON.parse(_accepted);
+    return accepted;
+  }
+
+  setState() {
+    const cookieNoticeSlot = this.querySelector('[slot=cookieNotice]');
+    if (this.checkIfCookiesAccepted() || !cookieNoticeSlot) {
+      this.state = 'renderVideo'
+    } else {
+      this.state = 'renderNotice'
+    }
   }
 
   render() {
-    return html`
-    ${!this.videoLoaded ?
-      html`
-      <div class="frame">
-        <slot name="thumbnail"></slot>
-      </div>
-      <div class="pin button-wrapper">
-        <slot name="controller"></slot>
-      </div>
-      `:
-      constructIframe(this.videoId, this.provider)
+    if (this.state === 'initial') {
+      return initialTemplate;
     }
-    `;
+    if (this.state === 'renderNotice') {
+      return cookieNotice;
+    }
+    return constructIframe(this.videoId, this.provider)
   }
 }
