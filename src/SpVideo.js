@@ -101,7 +101,7 @@ export class SpVideo extends LitElement {
           box-sizing: border-box;
           background-color: rgba(255, 255, 255, 0.75);
           backdrop-filter: blur(1em);
-          overflow: scroll;
+          overflow-y: scroll;
           padding: 0 1em;
         }`
     ];
